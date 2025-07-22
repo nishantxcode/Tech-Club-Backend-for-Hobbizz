@@ -4,11 +4,11 @@ const router = express.Router();
 const requireUser = require("../../../middleWares/requireUser");
 
 
-const DROLE = mongoose.model("CRAFTDROLE");
-const DISTRICT = mongoose.model("CRAFTDISTRICT");
+const DROLE = mongoose.model("TECHDROLE");
+const DISTRICT = mongoose.model("TECHDISTRICT");
 
 // Register role application API
-router.post("/craftapplyRole",require,(req, res) => {
+router.post("/techapplyRole",require,(req, res) => {
     const { club, interest, school, district, state } = req.body;
 
     if (!club || !interest || !school || !district || !state) {
@@ -33,7 +33,7 @@ router.post("/craftapplyRole",require,(req, res) => {
 });
 
 // GET /districtinfo?name=Varanasi
-router.get("/craftdistrictinfo", async (req, res) => {
+router.get("/techdistrictinfo", async (req, res) => {
   const { name } = req.query;
   if (!name) {
     return res.status(400).json({ error: "District name is required" });
@@ -58,7 +58,7 @@ router.get("/craftdistrictinfo", async (req, res) => {
 
 
 // Fetch applied council members for same district (excluding head)
-router.get("/craftgetAppliedCouncil/:headId", async (req, res) => {
+router.get("/techgetAppliedCouncil/:headId", async (req, res) => {
     try {
         const headId = req.params.headId;
 
@@ -87,7 +87,7 @@ router.get("/craftgetAppliedCouncil/:headId", async (req, res) => {
 
 
 // GET /getteachers?district=Kanpur
-router.get("/craftgetteachers", async (req, res) => {
+router.get("/techgetteachers", async (req, res) => {
   const { district } = req.query;
 
   if (!district) {
@@ -116,7 +116,7 @@ router.get("/craftgetteachers", async (req, res) => {
 
 
 // Set as Head API
-router.put("/craftsethead/:id", (req, res) => {
+router.put("/techsethead/:id", (req, res) => {
     DROLE.findByIdAndUpdate(
         req.params.id,
         { $set: { role: "head" } },
@@ -135,7 +135,7 @@ router.put("/craftsethead/:id", (req, res) => {
 });
 
 // Set as Council API
-router.put("/craftsetcouncil/:id", (req, res) => {
+router.put("/techsetcouncil/:id", (req, res) => {
     DROLE.findByIdAndUpdate(
         req.params.id,
         { $set: { role: "council" } },

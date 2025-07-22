@@ -7,10 +7,10 @@ const requireLoginUser = require("../../../middleWares/requireLoginUser");
 
 const DIRECTOR = mongoose.model("DIRECTOR");
 const LOCALEVENT= mongoose.model("LOCALEVENT");
-const ARTCLUB = mongoose.model("ARTCLUB");
+const TECHCLUB = mongoose.model("TECHCLUB");
 
 
-// GET /get-chapter?club=artclub&district=Varanasi
+// GET /get-chapter?club=techclub&district=Varanasi
 router.get("/get-events", async (req, res) => {
   try {
     const { club, district } = req.query;
@@ -56,7 +56,7 @@ router.get("/get-events", async (req, res) => {
 
 router.post("/create-chapter", requireLoginUser, async (req, res) => {
   const clubModels = {
-    "artclub": ARTCLUB
+    "techclub": TECHCLUB
   };
 
 
@@ -81,14 +81,14 @@ router.post("/create-chapter", requireLoginUser, async (req, res) => {
       return res.status(400).json({ message: `Invalid club type: ${club}` });
     } 
 
-    // Fetch Art Club for given district and club
-    const artClub = await ClubModel.findOne({ district });
-    if (!artClub) {
-      return res.status(403).json({ message: `Art club not found for district: ${district}` });
+    // Fetch TECH Club for given district and club
+    const techClub = await ClubModel.findOne({ district });
+    if (!techClub) {
+      return res.status(403).json({ message: `Tech club not found for district: ${district}` });
     }
 
-    const head = artClub.head;
-    const council_members = artClub.council;
+    const head = techClub.head;
+    const council_members = techClub.council;
 
     // Create new Chapter
     const newChapter = new LOCALEVENT({

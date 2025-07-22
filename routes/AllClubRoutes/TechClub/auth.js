@@ -6,19 +6,19 @@ const bcryptjs = require('bcryptjs');
 const jwt = require("jsonwebtoken")
 
 
-const CRAFTCABINATE = mongoose.model("CRAFTCABINATE");
-const CRAFTDIRECTOR = mongoose.model("CRAFTDIRECTOR");
-const ARTCLUB = mongoose.model("ARTCLUB");
-const CRAFTEDITOR = mongoose.model("CRAFTEDITOR");
-const CRAFTJUDGE = mongoose.model("CRAFTJUDGE");
-const CRAFTPRINCIPLE = mongoose.model("CRAFTPRINCIPLE");
+const TECHCABINATE = mongoose.model("TECHCABINATE");
+const TECHDIRECTOR = mongoose.model("TECHDIRECTOR");
+const TECHCLUB = mongoose.model("TECHCLUB");
+const TECHEDITOR = mongoose.model("TECHEDITOR");
+const TECHJUDGE = mongoose.model("TECHJUDGE");
+const TECHPRINCIPLE = mongoose.model("TECHPRINCIPLE");
 
 
 const {Jwt_secret} = require("../../../keys");
 
 
 
-router.post("/CRAFTCABINATE-signup" , (req,res)=> {
+router.post("/TECHCABINATE-signup" , (req,res)=> {
     const {name , password ,email , state , district , school} = req.body;
     const ip = req.headers['cf-connecting-ip'] ||
                 req.headers['x-real-ip'] ||
@@ -30,14 +30,14 @@ router.post("/CRAFTCABINATE-signup" , (req,res)=> {
         return res.status(422).json({error : "Please add all the fields"})
     }
 
-    CRAFTCABINATE.findOne({$or : [{email : email} ]}).then((savedUser) => {
+    TECHCABINATE.findOne({$or : [{email : email} ]}).then((savedUser) => {
         if(savedUser){
             return res.status(422).json({error : "user already exist with that email or userName"})
         }
 
 
         bcryptjs.hash(password , 12).then((hashedPassword) => {
-            const teacher = new CRAFTCABINATE ({
+            const teacher = new TECHCABINATE ({
                 name , 
                 email,    
                 password:hashedPassword, //hiding password,
@@ -56,14 +56,14 @@ router.post("/CRAFTCABINATE-signup" , (req,res)=> {
 
 
 
-router.post("/CRAFTCABINATE-signin" , (req , res) => {
+router.post("/TECHCABINATE-signin" , (req , res) => {
     const {email , password} = req.body;
 
     if(!email || !password){
         return res.status(422).json({error: "please add all the fields"})
     }
 
-    CRAFTCABINATE.findOne({email:email}).then((savedUser) => {
+    TECHCABINATE.findOne({email:email}).then((savedUser) => {
         if(!savedUser){
             return res.status(422).json({error:"Invalid Email"})
         }
@@ -86,7 +86,7 @@ router.post("/CRAFTCABINATE-signin" , (req , res) => {
 
 
 
-router.post("/CRAFTDIRECTOR-signup", async (req, res) => {
+router.post("/TECHDIRECTOR-signup", async (req, res) => {
   const { name, password, email, state, district, clubName } = req.body;
 
   const ip =
@@ -101,7 +101,7 @@ router.post("/CRAFTDIRECTOR-signup", async (req, res) => {
   }
 
   try {
-    const savedUser = await CRAFTDIRECTOR.findOne({
+    const savedUser = await TECHDIRECTOR.findOne({
       $or: [{ email: email }, { clubName: clubName }]
     });
 
@@ -113,7 +113,7 @@ router.post("/CRAFTDIRECTOR-signup", async (req, res) => {
 
     const hashedPassword = await bcryptjs.hash(password, 12);
 
-    const director = new CRAFTDIRECTOR({
+    const director = new TECHDIRECTOR({
       name,
       email,
       password: hashedPassword,
@@ -125,9 +125,9 @@ router.post("/CRAFTDIRECTOR-signup", async (req, res) => {
 
     const savedDirector = await director.save();
 
-    if (clubName.toUpperCase() === "ART") {
-      const artClubId = "684a8c32d27f1ad8681187d0";
-      await ARTCLUB.findByIdAndUpdate(artClubId, {
+    if (clubName.toUpperCase() === "TECH") {
+      const techClubId = "684a8c32d27f1ad8681187d0";
+      await TECHCLUB.findByIdAndUpdate(techClubId, {
         $push: { director: savedDirector._id }
       });
     }
@@ -140,14 +140,14 @@ router.post("/CRAFTDIRECTOR-signup", async (req, res) => {
 });
 
 
-router.post("/CRAFTDIRECTOR-signin" , (req , res) => {
+router.post("/TECHDIRECTOR-signin" , (req , res) => {
     const {email , password} = req.body;
 
     if(!email || !password){
         return res.status(422).json({error: "please add all the fields"})
     }
 
-    CRAFTDIRECTOR.findOne({email:email}).then((savedUser) => {
+    TECHDIRECTOR.findOne({email:email}).then((savedUser) => {
         if(!savedUser){
             return res.status(422).json({error:"Invalid Email"})
         }
@@ -170,7 +170,7 @@ router.post("/CRAFTDIRECTOR-signin" , (req , res) => {
 
 
 
-router.post("/CRAFTEDITOR-signup", async (req, res) => {
+router.post("/TECHEDITOR-signup", async (req, res) => {
   const { name, password, email, state, district, clubName } = req.body;
 
   const ip =
@@ -185,7 +185,7 @@ router.post("/CRAFTEDITOR-signup", async (req, res) => {
   }
 
   try {
-    const savedUser = await CRAFTEDITOR.findOne({
+    const savedUser = await TECHEDITOR.findOne({
       $or: [{ email: email }, { clubName: clubName }]
     });
 
@@ -197,7 +197,7 @@ router.post("/CRAFTEDITOR-signup", async (req, res) => {
 
     const hashedPassword = await bcryptjs.hash(password, 12);
 
-    const director = new CRAFTEDITOR({
+    const director = new TECHEDITOR({
       name,
       email,
       password: hashedPassword,
@@ -209,9 +209,9 @@ router.post("/CRAFTEDITOR-signup", async (req, res) => {
 
     const savedDirector = await director.save();
 
-    if (clubName.toUpperCase() === "ART") {
-      const artClubId = "684a8c32d27f1ad8681187d0";
-      await ARTCLUB.findByIdAndUpdate(artClubId, {
+    if (clubName.toUpperCase() === "TECH") {
+      const techClubId = "684a8c32d27f1ad8681187d0";
+      await TECHCLUB.findByIdAndUpdate(techClubId, {
         $push: { director: savedDirector._id }
       });
     }
@@ -225,14 +225,14 @@ router.post("/CRAFTEDITOR-signup", async (req, res) => {
 
 
 
-router.post("/CRAFTEDITOR-signin" , (req , res) => {
+router.post("/TECHEDITOR-signin" , (req , res) => {
     const {email , password} = req.body;
 
     if(!email || !password){
         return res.status(422).json({error: "please add all the fields"})
     }
 
-    CRAFTEDITOR.findOne({email:email}).then((savedUser) => {
+    TECHEDITOR.findOne({email:email}).then((savedUser) => {
         if(!savedUser){
             return res.status(422).json({error:"Invalid Email"})
         }
@@ -257,7 +257,7 @@ router.post("/CRAFTEDITOR-signin" , (req , res) => {
 
 
 
-router.post("/CRAFTJUDGE-signup", async (req, res) => {
+router.post("/TECHJUDGE-signup", async (req, res) => {
   const { name, password, email, state, district, clubName } = req.body;
 
   const ip =
@@ -272,7 +272,7 @@ router.post("/CRAFTJUDGE-signup", async (req, res) => {
   }
 
   try {
-    const savedUser = await CRAFTJUDGE.findOne({
+    const savedUser = await TECHJUDGE.findOne({
       $or: [{ email: email }, { clubName: clubName }]
     });
 
@@ -284,7 +284,7 @@ router.post("/CRAFTJUDGE-signup", async (req, res) => {
 
     const hashedPassword = await bcryptjs.hash(password, 12);
 
-    const director = new CRAFTJUDGE({
+    const director = new TECHJUDGE({
       name,
       email,
       password: hashedPassword,
@@ -296,9 +296,9 @@ router.post("/CRAFTJUDGE-signup", async (req, res) => {
 
     const savedDirector = await director.save();
 
-    if (clubName.toUpperCase() === "ART") {
-      const artClubId = "684a8c32d27f1ad8681187d0";
-      await ARTCLUB.findByIdAndUpdate(artClubId, {
+    if (clubName.toUpperCase() === "TECH") {
+      const techClubId = "684a8c32d27f1ad8681187d0";
+      await TECHCLUB.findByIdAndUpdate(techClubId, {
         $push: { director: savedDirector._id }
       });
     }
@@ -313,14 +313,14 @@ router.post("/CRAFTJUDGE-signup", async (req, res) => {
 
 
 
-router.post("/CRAFTJUDGE-signin" , (req , res) => {
+router.post("/TECHJUDGE-signin" , (req , res) => {
     const {email , password} = req.body;
 
     if(!email || !password){
         return res.status(422).json({error: "please add all the fields"})
     }
 
-    CRAFTJUDGE.findOne({email:email}).then((savedUser) => {
+    TECHJUDGE.findOne({email:email}).then((savedUser) => {
         if(!savedUser){
             return res.status(422).json({error:"Invalid Email"})
         }
@@ -343,7 +343,7 @@ router.post("/CRAFTJUDGE-signin" , (req , res) => {
 
 
 
-router.post("/CRAFTPRINCIPLE-signup", async (req, res) => {
+router.post("/TECHPRINCIPLE-signup", async (req, res) => {
   const { name, password, email, state, district, clubName } = req.body;
 
   const ip =
@@ -358,7 +358,7 @@ router.post("/CRAFTPRINCIPLE-signup", async (req, res) => {
   }
 
   try {
-    const savedUser = await CRAFTPRINCIPLE.findOne({
+    const savedUser = await TECHPRINCIPLE.findOne({
       $or: [{ email: email }, { clubName: clubName }]
     });
 
@@ -370,7 +370,7 @@ router.post("/CRAFTPRINCIPLE-signup", async (req, res) => {
 
     const hashedPassword = await bcryptjs.hash(password, 12);
 
-    const director = new CRAFTPRINCIPLE({
+    const director = new TECHPRINCIPLE({
       name,
       email,
       password: hashedPassword,
@@ -382,9 +382,9 @@ router.post("/CRAFTPRINCIPLE-signup", async (req, res) => {
 
     const savedDirector = await director.save();
 
-    if (clubName.toUpperCase() === "ART") {
-      const artClubId = "684a8c32d27f1ad8681187d0";
-      await ARTCLUB.findByIdAndUpdate(artClubId, {
+    if (clubName.toUpperCase() === "TECH") {
+      const techClubId = "684a8c32d27f1ad8681187d0";
+      await TECHCLUB.findByIdAndUpdate(techClubId, {
         $push: { director: savedDirector._id }
       });
     }
@@ -399,14 +399,14 @@ router.post("/CRAFTPRINCIPLE-signup", async (req, res) => {
 
 
 
-router.post("/CRAFTPRINCIPLE-signin" , (req , res) => {
+router.post("/TECHPRINCIPLE-signin" , (req , res) => {
     const {email , password} = req.body;
 
     if(!email || !password){
         return res.status(422).json({error: "please add all the fields"})
     }
 
-    CRAFTPRINCIPLE.findOne({email:email}).then((savedUser) => {
+    TECHPRINCIPLE.findOne({email:email}).then((savedUser) => {
         if(!savedUser){
             return res.status(422).json({error:"Invalid Email"})
         }

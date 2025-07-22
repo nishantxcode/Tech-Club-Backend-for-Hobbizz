@@ -11,7 +11,7 @@ const requireLoginUser = require("../../../middleWares/requireUser");
 const ACTIVITY = mongoose.model("ACTIVITY");
 const CABINATE = mongoose.model("CABINATE");
 const DIRECTOR = mongoose.model("DIRECTOR");
-const ARTCLUB = mongoose.model("ARTCLUB");
+const TECHCLUB = mongoose.model("TECHCLUB");
 const USER = mongoose.model("USER");
 
 
@@ -33,7 +33,7 @@ router.post("/create-activity", requireLogin, async (req, res) => {
 
     const savedEvent = await event.save();
 
-    await ARTCLUB.findByIdAndUpdate(
+    await TECHCLUB.findByIdAndUpdate(
       "684a8c32d27f1ad8681187d0",
       { $push: { activities: savedEvent._id } },
       { new: true }

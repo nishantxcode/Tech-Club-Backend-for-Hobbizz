@@ -139,7 +139,7 @@ router.get('/clubdomainviewallpost', async (req, res) => {
 
 
 
-router.get("/artJournal/:id", async (req, res) => {
+router.get("/techJournal/:id", async (req, res) => {
   try {
     const journalId = req.params.id;
 
@@ -156,7 +156,7 @@ router.get("/artJournal/:id", async (req, res) => {
 });
 
 
-router.get("/artNews/:id", async (req, res) => {
+router.get("/techNews/:id", async (req, res) => {
   try {
     const journalId = req.params.id;
 
@@ -266,7 +266,7 @@ router.get('/heritagegetallpost', async (req, res) => {
 });
 
 
-router.get("/artHeritage/:id", async (req, res) => {
+router.get("/techHeritage/:id", async (req, res) => {
   try {
     const journalId = req.params.id;
 

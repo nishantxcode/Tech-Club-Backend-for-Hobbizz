@@ -9,7 +9,7 @@ const {Jwt_secret} = require("../../../keys");
 
 const CLUBNEWS = mongoose.model("CLUBNEWS");
 const CLUBJOURNAL = mongoose.model("CLUBJOURNAL");
-const CLUBDOMAIN = mongoose.model("CLUBDOMAIN");
+const TECHCLUBDOMAIN = mongoose.model("TECHCLUBDOMAIN");
 const GALLERY = mongoose.model("GALLERY");
 const HERITAGE = mongoose.model("HERITAGE");
 const CALENDAR = mongoose.model("CALENDAR");
@@ -65,7 +65,7 @@ router.post('/clubdomain', async (req, res) => {
   try {
     const newsData = req.body;
 
-    const newNews = new CLUBDOMAIN(newsData);
+    const newNews = new TECHCLUBDOMAIN(newsData);
     await newNews.save();
 
     res.status(201).json({
@@ -121,7 +121,7 @@ router.get('/clubjpurnalviewallpost', async (req, res) => {
 
 router.get('/clubdomainviewallpost', async (req, res) => {
   try {
-    const allNews = await CLUBDOMAIN.find().sort({ publishedAt: -1 }); // Latest first
+    const allNews = await TECHCLUBDOMAIN.find().sort({ publishedAt: -1 }); // Latest first
     res.status(200).json({
       success: true,
       count: allNews.length,

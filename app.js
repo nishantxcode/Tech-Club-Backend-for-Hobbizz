@@ -57,13 +57,25 @@ require('./model/EditorArtClub/clublegacy')
 
 // -----------------------------------------techClubModel-----------------------------------------------------
 require('./AllModels/techClubModel/techdirector')
+require('./AllModels/techClubModel/techaddActivity')
+require('./AllModels/techClubModel/techaddCompitition')
 require('./AllModels/techClubModel/techeditor')
 require('./AllModels/techClubModel/techjudge')
 require('./AllModels/techClubModel/techprinciple')
 require('./AllModels/techClubModel/techuser')
 require('./AllModels/techClubModel/techcabinate')
+require('./AllModels/techClubModel/clubs/techClubs') 
 require('./AllModels/techClubModel/tech-apply-role')
-require('./AllModels/techClubModel/techdistrict')
+// require('./AllModels/techClubModel/techjudge')
+
+
+require('./AllModels/techClubModel/EditorTechClub/techClubDomain') 
+require('./AllModels/techClubModel/EditorTechClub/techClubGallery') 
+require('./AllModels/techClubModel/EditorTechClub/techClubHeritage') 
+require('./AllModels/techClubModel/EditorTechClub/techClubNews') 
+require('./AllModels/techClubModel/EditorTechClub/techClublegacy') 
+require('./AllModels/techClubModel/EditorTechClub/techJournal') 
+
 
 
 // ----------------------------------------------------------------------------------------------
@@ -110,8 +122,8 @@ app.use(require('./routes/AllClubRoutes/TechClub/chapter'))
 app.use(require('./routes/AllClubRoutes/TechClub/club'))
 app.use(require('./routes/AllClubRoutes/TechClub/compitition'))
 app.use(require('./routes/AllClubRoutes/TechClub/editor'))
-app.use(require('./routes/AllClubRoutes/TechClub/role'))
-app.use(require('./routes/AllClubRoutes/TechClub/role'))
+// app.use(require('./routes/AllClubRoutes/TechClub/role'))
+// app.use(require('./routes/AllClubRoutes/TechClub/role'))
 
 // ----------------------------------------------------------------------------------------------
 

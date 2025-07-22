@@ -12,7 +12,7 @@ const ACTIVITY = mongoose.model("ACTIVITY");
 const CABINATE = mongoose.model("CABINATE");
 const DIRECTOR = mongoose.model("DIRECTOR");
 const TECHCLUB = mongoose.model("TECHCLUB");
-const COMPITITION = mongoose.model("COMPITITION");
+const TECHCOMPITITION = mongoose.model("TECHCOMPITITION");
 const USER = mongoose.model("USER");
 const JUDGE = mongoose.model("JUDGE");
 
@@ -20,7 +20,7 @@ const JUDGE = mongoose.model("JUDGE");
 
 
 
-router.post("/create-compitition", requireLoginPrinciple, async (req, res) => {
+router.post("/techCreate-compitition", requireLoginPrinciple, async (req, res) => {
   const { title, desc, pic } = req.body;
 
   if (!title || !desc || !pic ) {
@@ -28,7 +28,7 @@ router.post("/create-compitition", requireLoginPrinciple, async (req, res) => {
   }
 
   try {
-    const event = new COMPITITION({
+    const event = new TECHCOMPITITION({
       title,
       desc,
       pic,
@@ -52,8 +52,8 @@ router.post("/create-compitition", requireLoginPrinciple, async (req, res) => {
 
 
 
-router.get("/allCompitition", (req, res) => {
-  COMPITITION.find().then((events) => {
+router.get("/techAllCompitition", (req, res) => {
+  TECHCOMPITITION.find().then((events) => {
     res.json(events);
   });
 });
@@ -61,9 +61,9 @@ router.get("/allCompitition", (req, res) => {
 
 
 
-router.get("/getCompitition/:compititionid", async (req, res) => {
+router.get("/techGetCompitition/:compititionid", async (req, res) => {
   try {
-    const competition = await COMPITITION.findOne({ _id: req.params.compititionid })
+    const competition = await TECHCOMPITITION.findOne({ _id: req.params.compititionid })
   .populate("uploads.uploadedBy", "name email")
 
     if (!competition) {
@@ -79,11 +79,11 @@ router.get("/getCompitition/:compititionid", async (req, res) => {
 
 
 
-router.delete("/competition/:id", async (req, res) => {
+router.delete("/techCompetition/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    const deletedEvent = await COMPITITION.findByIdAndDelete(id);
+    const deletedEvent = await TECHCOMPITITION.findByIdAndDelete(id);
 
     if (!deletedEvent) {
       return res.status(404).json({ error: "Event not found" });
@@ -101,7 +101,7 @@ router.delete("/competition/:id", async (req, res) => {
 
 
 
-router.put("/activity/set-live/:activityID", async (req, res) => {
+router.put("/techActivity/set-live/:activityID", async (req, res) => {
   try {
     const activityId = req.params.activityID;
     const { isLive } = req.body;
@@ -112,7 +112,7 @@ router.put("/activity/set-live/:activityID", async (req, res) => {
     }
 
     // ✅ Update the field
-    const updated = await COMPITITION.findByIdAndUpdate(
+    const updated = await TECHCOMPITITION.findByIdAndUpdate(
       activityId,
       { isLive },
       { new: true }
@@ -135,12 +135,12 @@ router.put("/activity/set-live/:activityID", async (req, res) => {
 
 
 
-router.post("/register-compitition/:activityId", requireLogin, async (req, res) => {
+router.post("/techRegister-compitition/:activityId", requireLogin, async (req, res) => {
   const userId = req.user._id;
   const { activityId } = req.params;
 
   try {
-    const activity = await COMPITITION.findById(activityId);
+    const activity = await TECHCOMPITITION.findById(activityId);
 
     if (!activity) {
       return res.status(404).json({ error: "Activity not found" });
@@ -163,12 +163,12 @@ router.post("/register-compitition/:activityId", requireLogin, async (req, res) 
 
 
 
-router.post("/unregister-compitition/:activityId", requireLogin, async (req, res) => {
+router.post("/techUnregister-compitition/:activityId", requireLogin, async (req, res) => {
   const userId = req.user._id;
   const { activityId } = req.params;
 
   try {
-    const activity = await COMPITITION.findById(activityId);
+    const activity = await TECHCOMPITITION.findById(activityId);
 
     if (!activity) return res.status(404).json({ error: "Activity not found" });
 
@@ -187,13 +187,13 @@ router.post("/unregister-compitition/:activityId", requireLogin, async (req, res
 });
 
 
-router.post("/upload-photo-compitition/:eventId", requireLogin, async (req, res) => {
+router.post("/techUpload-photo-compitition/:eventId", requireLogin, async (req, res) => {
   try {
     const { pic } = req.body;
     const userId = req.user._id.toString();
     const eventId = req.params.eventId;
 
-    const event = await COMPITITION.findById(eventId);
+    const event = await TECHCOMPITITION.findById(eventId);
     if (!event) return res.status(404).json({ error: "Event not found" });
 
 
@@ -220,11 +220,11 @@ router.post("/upload-photo-compitition/:eventId", requireLogin, async (req, res)
   }
 });
 
-router.get("/has-uploaded-compitition/:eventId", requireLogin, async (req, res) => {
+router.get("/techHas-uploaded-compitition/:eventId", requireLogin, async (req, res) => {
   const userId = req.user._id.toString();
   const eventId = req.params.eventId;
 
-  const event = await COMPITITION.findById(eventId);
+  const event = await TECHCOMPITITION.findById(eventId);
   if (!event) return res.status(404).json({ error: "Event not found" });
 
   const hasUploaded = event.uploads.some(
@@ -235,12 +235,12 @@ router.get("/has-uploaded-compitition/:eventId", requireLogin, async (req, res) 
 });
 
 
-router.get("/event-participants-compi/:eventId", async (req, res) => {
+router.get("/techEvent-participants-compi/:eventId", async (req, res) => {
   try {
     const { eventId } = req.params;
 
     // 1. Find the competition by ID and select required fields
-    const event = await COMPITITION.findById(eventId).select("Registrations uploads");
+    const event = await TECHCOMPITITION.findById(eventId).select("Registrations uploads");
 
     if (!event) {
       return res.status(404).json({ error: "Event not found" });
@@ -280,7 +280,7 @@ router.get("/event-participants-compi/:eventId", async (req, res) => {
 
 // -------------------------------------------Priciple-----------------------------------------------------------------------
 
-router.get("/allJudges", async (req, res) => {
+router.get("/techAllJudges", async (req, res) => {
   try {
     const judges = await JUDGE.find();
     return res.status(200).json(judges);
@@ -292,7 +292,7 @@ router.get("/allJudges", async (req, res) => {
 
 
 
-router.post("/assignJudge", async (req, res) => {
+router.post("/techAssignJudge", async (req, res) => {
   const { id, judgeId } = req.body;
 
   if (!id || !judgeId) {
@@ -300,7 +300,7 @@ router.post("/assignJudge", async (req, res) => {
   }
 
   try {
-    const updated = await COMPITITION.findByIdAndUpdate(
+    const updated = await TECHCOMPITITION.findByIdAndUpdate(
       id,
       { $addToSet: { judges: judgeId } },
       { new: true }
@@ -316,11 +316,11 @@ router.post("/assignJudge", async (req, res) => {
   }
 });
 
-router.get("/competition/:id/judges", async (req, res) => {
+router.get("/techCompetition/:id/judges", async (req, res) => {
   const { id } = req.params;
 
   try {
-    const competition = await COMPITITION.findById(id).populate("judges", "name email clubName");
+    const competition = await TECHCOMPITITION.findById(id).populate("judges", "name email clubName");
 
     if (!competition) {
       return res.status(404).json({ error: "Competition not found" });
@@ -336,7 +336,7 @@ router.get("/competition/:id/judges", async (req, res) => {
 
 
 
-router.post("/removeJudge", async (req, res) => {
+router.post("/techRemoveJudge", async (req, res) => {
   const { id, judgeId } = req.body;
 
   if (!id || !judgeId) {
@@ -344,7 +344,7 @@ router.post("/removeJudge", async (req, res) => {
   }
 
   try {
-    const updatedCompetition = await COMPITITION.findByIdAndUpdate(
+    const updatedCompetition = await TECHCOMPITITION.findByIdAndUpdate(
       id,
       { $pull: { judges: judgeId } },
       { new: true }
@@ -371,11 +371,11 @@ router.post("/removeJudge", async (req, res) => {
 
 // -------------------------------------------------JUDGE-----------------------------------------------------------------
 
-router.get("/competitions/judge/:judgeId", async (req, res) => {
+router.get("/techCompetitions/judge/:judgeId", async (req, res) => {
   const { judgeId } = req.params;
 
   try {
-    const competitions = await COMPITITION.find({
+    const competitions = await TECHCOMPITITION.find({
       isLive: true,
       judges: judgeId, // match if judgeId is in the array
     })
@@ -393,7 +393,7 @@ router.get("/competitions/judge/:judgeId", async (req, res) => {
 
 
 
-router.patch("/assign-mark", async (req, res) => {
+router.patch("/techAssign-mark", async (req, res) => {
   const { uploadId, judgeId, mark } = req.body;
 
   if (!uploadId || !judgeId || typeof mark !== "number") {
@@ -420,7 +420,7 @@ router.patch("/assign-mark", async (req, res) => {
   }
 
   try {
-    const updated = await COMPITITION.updateOne(
+    const updated = await TECHCOMPITITION.updateOne(
       { "uploads._id": uploadId },
       { $set: { [`uploads.$.${fieldToUpdate}`]: mark } }
     );
@@ -437,7 +437,7 @@ router.patch("/assign-mark", async (req, res) => {
 });
 
 
-router.get("/:competitionId/upload/:uploadId/total-score", async (req, res) => {
+router.get("/:techCompetitionId/upload/:uploadId/total-score", async (req, res) => {
   const { competitionId, uploadId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(competitionId) || !mongoose.Types.ObjectId.isValid(uploadId)) {
@@ -445,7 +445,7 @@ router.get("/:competitionId/upload/:uploadId/total-score", async (req, res) => {
   }
 
   try {
-    const competition = await COMPITITION.findById(competitionId);
+    const competition = await TECHCOMPITITION.findById(competitionId);
 
     if (!competition) {
       return res.status(404).json({ error: "Competition not found" });
@@ -481,7 +481,7 @@ router.get("/:competitionId/upload/:uploadId/total-score", async (req, res) => {
 });
 
 
-router.get("/:competitionId/uploads/total-scores", async (req, res) => {
+router.get("/:techCompetitionId/uploads/total-scores", async (req, res) => {
   const { competitionId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(competitionId)) {
@@ -489,7 +489,7 @@ router.get("/:competitionId/uploads/total-scores", async (req, res) => {
   }
 
   try {
-    const competition = await COMPITITION.findById(competitionId);
+    const competition = await TECHCOMPITITION.findById(competitionId);
 
     if (!competition) {
       return res.status(404).json({ error: "Competition not found" });
@@ -520,7 +520,7 @@ router.get("/:competitionId/uploads/total-scores", async (req, res) => {
 
 
 
-router.get("/:competitionId/results", async (req, res) => {
+router.get("/:techCompetitionId/results", async (req, res) => {
   const { competitionId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(competitionId)) {
@@ -528,7 +528,7 @@ router.get("/:competitionId/results", async (req, res) => {
   }
 
   try {
-    const competition = await COMPITITION.findById(competitionId).populate("uploads.uploadedBy", "name email");
+    const competition = await TECHCOMPITITION.findById(competitionId).populate("uploads.uploadedBy", "name email");
 
     if (!competition) {
       return res.status(404).json({ error: "Competition not found" });
@@ -567,7 +567,7 @@ router.get("/:competitionId/results", async (req, res) => {
 });
 
 
-router.put("/:competitionId/generate-result", async (req, res) => {
+router.put("/:techCompetitionId/generate-result", async (req, res) => {
   const { competitionId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(competitionId)) {
@@ -575,7 +575,7 @@ router.put("/:competitionId/generate-result", async (req, res) => {
   }
 
   try {
-    const updatedComp = await COMPITITION.findByIdAndUpdate(
+    const updatedComp = await TECHCOMPITITION.findByIdAndUpdate(
       competitionId,
       { $set: { resultLive: true } },
       { new: true }
@@ -597,7 +597,7 @@ router.put("/:competitionId/generate-result", async (req, res) => {
 });
 
 
-router.get("/competitions/:id", async (req, res) => {
+router.get("/techCompetitions/:id", async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -605,7 +605,7 @@ router.get("/competitions/:id", async (req, res) => {
   }
 
   try {
-    const competition = await COMPITITION.findById(id)
+    const competition = await TECHCOMPITITION.findById(id)
       .populate("postedBy", "name email")
       .populate("Registrations", "name email")
       .populate("judges", "name email")
@@ -621,14 +621,6 @@ router.get("/competitions/:id", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
-
-
-
-
-
-
-
 
 
 

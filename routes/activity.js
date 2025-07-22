@@ -6,12 +6,14 @@ const axios = require("axios");
 const requireLogin = require("../middleWares/requireLogin");
 const requireLoginUser = require("../middleWares/requireUser");
 
+
 // const CABINATE = mongoose.model("CABINATE");
 const ACTIVITY = mongoose.model("ACTIVITY");
 const CABINATE = mongoose.model("CABINATE");
 const DIRECTOR = mongoose.model("DIRECTOR");
 const ARTCLUB = mongoose.model("ARTCLUB");
 const USER = mongoose.model("USER");
+
 
 
 router.post("/create-activity", requireLogin, async (req, res) => {
@@ -24,7 +26,7 @@ router.post("/create-activity", requireLogin, async (req, res) => {
   try {
     const event = new ACTIVITY({
       title,
-      category ,
+      category,
       desc,
       pic,
       postedBy: req.user,
@@ -45,23 +47,17 @@ router.post("/create-activity", requireLogin, async (req, res) => {
   }
 });
 
-
 router.get("/allActivities", requireLogin, (req, res) => {
   ACTIVITY.find().then((events) => {
     res.json(events);
   });
 });
 
-
 router.get("/getactivity/:activityid", (req, res) => {
-  ACTIVITY.findOne({ _id: req.params.activityid })
-    .then(activity => {
-      // console.log(activity)
-      return res.json(activity)
-    })
-})
-
-
+  ACTIVITY.findOne({ _id: req.params.activityid }).then(activity => {
+    return res.json(activity);
+  });
+});
 
 router.post("/register-activity/:activityId", requireLogin, async (req, res) => {
   const userId = req.user._id;
@@ -73,7 +69,6 @@ router.post("/register-activity/:activityId", requireLogin, async (req, res) => 
     if (!activity) {
       return res.status(404).json({ error: "Activity not found" });
     }
-
 
     if (activity.Registrations.includes(userId)) {
       return res.status(400).json({ message: "Already registered" });
@@ -89,8 +84,6 @@ router.post("/register-activity/:activityId", requireLogin, async (req, res) => 
   }
 });
 
-
-
 router.post("/unregister-activity/:activityId", requireLogin, async (req, res) => {
   const userId = req.user._id;
   const { activityId } = req.params;
@@ -99,7 +92,6 @@ router.post("/unregister-activity/:activityId", requireLogin, async (req, res) =
     const activity = await ACTIVITY.findById(activityId);
 
     if (!activity) return res.status(404).json({ error: "Activity not found" });
-
 
     activity.Registrations = activity.Registrations.filter(
       (id) => id.toString() !== userId.toString()
@@ -114,7 +106,6 @@ router.post("/unregister-activity/:activityId", requireLogin, async (req, res) =
   }
 });
 
-
 router.post("/upload-photo/:eventId", requireLogin, async (req, res) => {
   try {
     const { pic } = req.body;
@@ -123,7 +114,6 @@ router.post("/upload-photo/:eventId", requireLogin, async (req, res) => {
 
     const event = await ACTIVITY.findById(eventId);
     if (!event) return res.status(404).json({ error: "Event not found" });
-
 
     const isRegistered = event.Registrations.includes(userId);
     if (!isRegistered) {
@@ -136,7 +126,6 @@ router.post("/upload-photo/:eventId", requireLogin, async (req, res) => {
     if (alreadyUploaded) {
       return res.status(409).json({ error: "You have already uploaded a photo for this event." });
     }
-
 
     event.uploads.push({ pic, uploadedBy: userId });
     await event.save();
@@ -162,8 +151,6 @@ router.get("/has-uploaded/:eventId", requireLogin, async (req, res) => {
   res.status(200).json({ hasUploaded });
 });
 
-
-
 router.get("/event-participants/:eventId", requireLogin, async (req, res) => {
   try {
     const event = await ACTIVITY.findById(req.params.eventId);
@@ -172,14 +159,11 @@ router.get("/event-participants/:eventId", requireLogin, async (req, res) => {
     const registrations = event.Registrations;
     const uploadsMap = new Map();
 
-    // Map uploadedBy => pic
     event.uploads.forEach(upload => {
       uploadsMap.set(upload.uploadedBy.toString(), upload.pic);
     });
 
-    // Fetch user details for registered users
-    const users = await USER.find({ _id: { $in: registrations } })
-      .select("_id name email ip");
+    const users = await USER.find({ _id: { $in: registrations } }).select("_id name email ip");
 
     const participants = users.map(user => ({
       _id: user._id,
@@ -204,14 +188,11 @@ router.get("/event-participants-user/:eventId", requireLoginUser, async (req, re
     const registrations = event.Registrations;
     const uploadsMap = new Map();
 
-    // Map uploadedBy => pic
     event.uploads.forEach(upload => {
       uploadsMap.set(upload.uploadedBy.toString(), upload);
     });
 
-    // Fetch user details for registered users
-    const users = await USER.find({ _id: { $in: registrations } })
-      .select("_id name email ip");
+    const users = await USER.find({ _id: { $in: registrations } }).select("_id name email ip");
 
     const participants = users.map(user => {
       const upload = uploadsMap.get(user._id.toString());
@@ -222,7 +203,7 @@ router.get("/event-participants-user/:eventId", requireLoginUser, async (req, re
         email: user.email,
         ip: user.ip,
         pic: upload ? upload.pic : null,
-        uploadId: upload ? upload._id : null, // 👈 This is the fix
+        uploadId: upload ? upload._id : null,
         isApproved: upload ? upload.isApproved : null,
       };
     });
@@ -234,12 +215,7 @@ router.get("/event-participants-user/:eventId", requireLoginUser, async (req, re
   }
 });
 
-
-
-
-
-
-// PUT request to approve an uploaded image
+// PUT approve
 router.put("/activity/approve-upload/:activityId/:uploadId", async (req, res) => {
   const { activityId, uploadId } = req.params;
 
@@ -247,10 +223,10 @@ router.put("/activity/approve-upload/:activityId/:uploadId", async (req, res) =>
     const activity = await ACTIVITY.findOneAndUpdate(
       {
         _id: activityId,
-        "uploads._id" : uploadId
+        "uploads._id": uploadId,
       },
       {
-        $set: { "uploads.$.isApproved": true }
+        $set: { "uploads.$.isApproved": true },
       },
       { new: true }
     );
@@ -266,14 +242,19 @@ router.put("/activity/approve-upload/:activityId/:uploadId", async (req, res) =>
   }
 });
 
-
+// PUT disapprove
 router.put("/activity/disapprove-upload/:activityId/:uploadId", async (req, res) => {
   const { activityId, uploadId } = req.params;
 
   try {
     const activity = await ACTIVITY.findOneAndUpdate(
-      { _id: activityId, "uploads._id": uploadId },
-      { $set: { "uploads.$.isApproved": false } },
+      {
+        _id: activityId,
+        "uploads._id": uploadId,
+      },
+      {
+        $set: { "uploads.$.isApproved": false },
+      },
       { new: true }
     );
 
@@ -288,24 +269,18 @@ router.put("/activity/disapprove-upload/:activityId/:uploadId", async (req, res)
   }
 });
 
-
-
 router.get("/activity/approved-uploads/:eventId", async (req, res) => {
   try {
     const { eventId } = req.params;
 
-    // Step 1: Get the activity
     const activity = await ACTIVITY.findById(eventId);
     if (!activity) return res.status(404).json({ error: "Activity not found" });
 
-    // Step 2: Filter approved uploads
     const approvedUploads = activity.uploads.filter(upload => upload.isApproved);
 
-    // Step 3: Fetch user details for those uploads
     const userIds = approvedUploads.map(u => u.uploadedBy);
     const users = await USER.find({ _id: { $in: userIds } }).select("_id name email");
 
-    // Step 4: Map user info into uploads
     const userMap = new Map();
     users.forEach(user => userMap.set(user._id.toString(), user));
 
@@ -329,15 +304,6 @@ router.get("/activity/approved-uploads/:eventId", async (req, res) => {
   }
 });
 
-
-
-
-
-
-
-
-
-
 router.put("/activity/approve-halloffame/:activityId/:uploadId", async (req, res) => {
   const { activityId, uploadId } = req.params;
 
@@ -345,10 +311,10 @@ router.put("/activity/approve-halloffame/:activityId/:uploadId", async (req, res
     const activity = await ACTIVITY.findOneAndUpdate(
       {
         _id: activityId,
-        "uploads._id" : uploadId
+        "uploads._id": uploadId,
       },
       {
-        $set: { "uploads.$.isHallofFame": true }
+        $set: { "uploads.$.isHallofFame": true },
       },
       { new: true }
     );
@@ -364,14 +330,18 @@ router.put("/activity/approve-halloffame/:activityId/:uploadId", async (req, res
   }
 });
 
-
 router.put("/activity/disapprove-halloffame/:activityId/:uploadId", async (req, res) => {
   const { activityId, uploadId } = req.params;
 
   try {
     const activity = await ACTIVITY.findOneAndUpdate(
-      { _id: activityId, "uploads._id": uploadId },
-      { $set: { "uploads.$.isHallofFame": false } },
+      {
+        _id: activityId,
+        "uploads._id": uploadId,
+      },
+      {
+        $set: { "uploads.$.isHallofFame": false },
+      },
       { new: true }
     );
 
@@ -386,24 +356,18 @@ router.put("/activity/disapprove-halloffame/:activityId/:uploadId", async (req, 
   }
 });
 
-
-
 router.get("/activity/hallOfFamePosts/:eventId", async (req, res) => {
   try {
     const { eventId } = req.params;
 
-    // Step 1: Get the activity
     const activity = await ACTIVITY.findById(eventId);
     if (!activity) return res.status(404).json({ error: "Activity not found" });
 
-    // Step 2: Filter approved uploads
     const approvedUploads = activity.uploads.filter(upload => upload.isHallofFame);
 
-    // Step 3: Fetch user details for those uploads
     const userIds = approvedUploads.map(u => u.uploadedBy);
     const users = await USER.find({ _id: { $in: userIds } }).select("_id name email");
 
-    // Step 4: Map user info into uploads
     const userMap = new Map();
     users.forEach(user => userMap.set(user._id.toString(), user));
 
@@ -427,11 +391,5 @@ router.get("/activity/hallOfFamePosts/:eventId", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
-
-
-
-
-
 
 module.exports = router;

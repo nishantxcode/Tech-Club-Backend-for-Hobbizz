@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 
-const craftdirectorSchema = new mongoose.Schema({
+const cabinateSchema = new mongoose.Schema({
     name : {
         type:String,
         require:true
@@ -10,17 +10,25 @@ const craftdirectorSchema = new mongoose.Schema({
         type: String,
         require:true
     },
+    state:{
+        type: String,
+        require:true
+    },
+    district:{
+        type: String,
+        require:true
+    },
     club:{
+        type: String,
+        default: null
+    },
+    school:{
         type: String,
         require:true
     },
     password:{
         type: String,
         require:true
-    },
-    clubName: {
-        type: String,
-        required: true
     },
     //add IP
     ip:{
@@ -31,4 +39,4 @@ const craftdirectorSchema = new mongoose.Schema({
 
 
 
-mongoose.model("CRAFTDIRECTOR" ,craftdirectorSchema )
+mongoose.model("TECHCABINATE" ,cabinateSchema )

@@ -27,4 +27,4 @@ const activitySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("CRAFTACTIVITY", activitySchema);
+module.exports = mongoose.model("TECHACTIVITY", activitySchema);

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 
-const craftprincipleSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     name : {
         type:String,
         require:true
@@ -10,17 +10,21 @@ const craftprincipleSchema = new mongoose.Schema({
         type: String,
         require:true
     },
-    club:{
+    state:{
+        type: String,
+        require:true
+    },
+    district:{
+        type: String,
+        require:true
+    },
+    school:{
         type: String,
         require:true
     },
     password:{
         type: String,
         require:true
-    },
-    clubName: {
-        type: String,
-        required: true
     },
     //add IP
     ip:{
@@ -29,6 +33,4 @@ const craftprincipleSchema = new mongoose.Schema({
     }
 })
 
-
-
-mongoose.model("CRAFTPRINCIPLE" ,craftprincipleSchema )
+mongoose.model("TECHUSER" ,userSchema )

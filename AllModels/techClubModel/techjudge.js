@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 
-const craftdirectorSchema = new mongoose.Schema({
+const techSchema = new mongoose.Schema({
     name : {
         type:String,
         require:true
@@ -31,4 +31,4 @@ const craftdirectorSchema = new mongoose.Schema({
 
 
 
-mongoose.model("CRAFTEDITOR" ,craftdirectorSchema )
+mongoose.model("TECHJUDGE" ,techSchema )

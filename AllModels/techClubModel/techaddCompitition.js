@@ -30,4 +30,4 @@ const activitySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("CRAFTCOMPITITION", activitySchema);
+module.exports = mongoose.model("TECHCOMPITITION", activitySchema);

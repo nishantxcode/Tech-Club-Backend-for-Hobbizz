@@ -11,7 +11,7 @@ const HeritageSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      enum: ['Traditional Art', 'Modern Art', 'Sculpture', 'Photography', 'Other'], // Apni categories add kar lo
+      enum: ['Software', 'Hardware', 'Robotics', 'AI/ML', 'Cybersecurity', 'Other'], // Apni categories add kar lo
       default: 'Other',
     },
     origin: {
@@ -45,4 +45,4 @@ const HeritageSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model('CRAFTLEGACY', HeritageSchema);
+module.exports = mongoose.model('TECHLEGACY', HeritageSchema);

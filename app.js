@@ -41,19 +41,32 @@ require('./model/EditorArtClub/clublegacy')
 
 
 
-// -----------------------------------------craftClubModel-----------------------------------------------------
-require('./AllModels/craftClubModel/craftdirector')
-require('./AllModels/craftClubModel/crafteditor')
-require('./AllModels/craftClubModel/craftjudge')
-require('./AllModels/craftClubModel/craftprinciple')
-require('./AllModels/craftClubModel/craftuser')
-require('./AllModels/craftClubModel/craftcabinate')
-require('./AllModels/craftClubModel/craft-apply-role')
-require('./AllModels/craftClubModel/craftdistrict')
+// // -----------------------------------------craftClubModel-----------------------------------------------------
+// require('./AllModels/craftClubModel/craftdirector')
+// require('./AllModels/craftClubModel/crafteditor')
+// require('./AllModels/craftClubModel/craftjudge')
+// require('./AllModels/craftClubModel/craftprinciple')
+// require('./AllModels/craftClubModel/craftuser')
+// require('./AllModels/craftClubModel/craftcabinate')
+// require('./AllModels/craftClubModel/craft-apply-role')
+// require('./AllModels/craftClubModel/craftdistrict')
 
 
 // ----------------------------------------------------------------------------------------------
 
+
+// -----------------------------------------techClubModel-----------------------------------------------------
+require('./AllModels/techClubModel/techdirector')
+require('./AllModels/techClubModel/techeditor')
+require('./AllModels/techClubModel/techjudge')
+require('./AllModels/techClubModel/techprinciple')
+require('./AllModels/techClubModel/techuser')
+require('./AllModels/techClubModel/techcabinate')
+require('./AllModels/techClubModel/tech-apply-role')
+require('./AllModels/techClubModel/techdistrict')
+
+
+// ----------------------------------------------------------------------------------------------
 
 
 
@@ -75,15 +88,30 @@ app.use(require('./routes/editorArtClub'))
 
 
 
-// -----------------------------------------CraftClubRoute-----------------------------------------------------
-app.use(require('./routes/AllClubRoutes/CraftClub/auth'))
-app.use(require('./routes/AllClubRoutes/CraftClub/activity'))
-app.use(require('./routes/AllClubRoutes/CraftClub/chapter'))
-app.use(require('./routes/AllClubRoutes/CraftClub/club'))
-app.use(require('./routes/AllClubRoutes/CraftClub/compitition'))
-app.use(require('./routes/AllClubRoutes/CraftClub/editor'))
-app.use(require('./routes/AllClubRoutes/CraftClub/role'))
-app.use(require('./routes/AllClubRoutes/CraftClub/role'))
+// // -----------------------------------------CraftClubRoute-----------------------------------------------------
+// app.use(require('./routes/AllClubRoutes/CraftClub/auth'))
+// app.use(require('./routes/AllClubRoutes/CraftClub/activity'))
+// app.use(require('./routes/AllClubRoutes/CraftClub/chapter'))
+// app.use(require('./routes/AllClubRoutes/CraftClub/club'))
+// app.use(require('./routes/AllClubRoutes/CraftClub/compitition'))
+// app.use(require('./routes/AllClubRoutes/CraftClub/editor'))
+// app.use(require('./routes/AllClubRoutes/CraftClub/role'))
+// app.use(require('./routes/AllClubRoutes/CraftClub/role'))
+
+// ----------------------------------------------------------------------------------------------
+
+
+
+
+// -----------------------------------------TechClubRoute-----------------------------------------------------
+app.use(require('./routes/AllClubRoutes/TechClub/auth'))
+app.use(require('./routes/AllClubRoutes/TechClub/activity'))
+app.use(require('./routes/AllClubRoutes/TechClub/chapter'))
+app.use(require('./routes/AllClubRoutes/TechClub/club'))
+app.use(require('./routes/AllClubRoutes/TechClub/compitition'))
+app.use(require('./routes/AllClubRoutes/TechClub/editor'))
+app.use(require('./routes/AllClubRoutes/TechClub/role'))
+app.use(require('./routes/AllClubRoutes/TechClub/role'))
 
 // ----------------------------------------------------------------------------------------------
 

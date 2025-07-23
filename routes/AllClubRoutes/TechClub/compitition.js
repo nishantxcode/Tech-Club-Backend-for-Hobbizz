@@ -14,7 +14,7 @@ const DIRECTOR = mongoose.model("DIRECTOR");
 const TECHCLUB = mongoose.model("TECHCLUB");
 const TECHCOMPITITION = mongoose.model("TECHCOMPITITION");
 const USER = mongoose.model("USER");
-const JUDGE = mongoose.model("JUDGE");
+const TECHJUDGE = mongoose.model("TECHJUDGE");
 
 
 
@@ -282,7 +282,7 @@ router.get("/techEvent-participants-compi/:eventId", async (req, res) => {
 
 router.get("/techAllJudges", async (req, res) => {
   try {
-    const judges = await JUDGE.find();
+    const judges = await TECHJUDGE.find();
     return res.status(200).json(judges);
   } catch (error) {
     console.error("Error fetching judges:", error);
@@ -437,7 +437,7 @@ router.patch("/techAssign-mark", async (req, res) => {
 });
 
 
-router.get("/:techCompetitionId/upload/:uploadId/total-score", async (req, res) => {
+router.get("/:CompetitionId/techupload/:uploadId/total-score", async (req, res) => {
   const { competitionId, uploadId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(competitionId) || !mongoose.Types.ObjectId.isValid(uploadId)) {
@@ -481,7 +481,7 @@ router.get("/:techCompetitionId/upload/:uploadId/total-score", async (req, res) 
 });
 
 
-router.get("/:techCompetitionId/uploads/total-scores", async (req, res) => {
+router.get("/:CompetitionId/techuploads/total-scores", async (req, res) => {
   const { competitionId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(competitionId)) {
@@ -519,8 +519,9 @@ router.get("/:techCompetitionId/uploads/total-scores", async (req, res) => {
 });
 
 
-
-router.get("/:techCompetitionId/results", async (req, res) => {
+router.get("/:CompetitionId/newresult",async (req,res)=>{
+  // return response.json({msg: "Helloooo"})
+  console.log("hello");
   const { competitionId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(competitionId)) {
@@ -564,10 +565,55 @@ router.get("/:techCompetitionId/results", async (req, res) => {
     console.error("Error generating results:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
+})
+// router.get("/:CompetitionId/tech-results", async (req, res) => {
+//   const { competitionId } = req.params;
+
+//   if (!mongoose.Types.ObjectId.isValid(competitionId)) {
+//     return res.status(400).json({ error: "Invalid competition ID" });
+//   }
+
+//   try {
+//     const competition = await TECHCOMPITITION.findById(competitionId).populate("uploads.uploadedBy", "name email");
+
+//     if (!competition) {
+//       return res.status(404).json({ error: "Competition not found" });
+//     }
+
+//     const results = competition.uploads.map(upload => {
+//       const judge1 = upload.judge1 || 0;
+//       const judge2 = upload.judge2 || 0;
+//       const judge3 = upload.judge3 || 0;
+//       const judge4 = upload.judge4 || 0;
+//       const totalScore = judge1 + judge2 + judge3 + judge4;
+
+//       return {
+//         uploadId: upload._id,
+//         pic: upload.pic,
+//         totalScore,
+//         breakdown: { judge1, judge2, judge3, judge4 },
+//         uploadedBy: upload.uploadedBy || null,
+//         createdAt: upload.createdAt
+//       };
+//     });
+
+//     // Sort by totalScore descending
+//     results.sort((a, b) => b.totalScore - a.totalScore);
+
+//     // Add ranks
+//     results.forEach((item, index) => {
+//       item.rank = index + 1;
+//     });
+
+//     res.json(results);
+//   } catch (error) {
+//     console.error("Error generating results:", error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
 
 
-router.put("/:techCompetitionId/generate-result", async (req, res) => {
+router.put("/:CompetitionId/techgenerate-result", async (req, res) => {
   const { competitionId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(competitionId)) {

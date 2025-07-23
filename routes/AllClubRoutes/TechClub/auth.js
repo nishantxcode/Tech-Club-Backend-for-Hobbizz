@@ -389,7 +389,7 @@ router.post("/TECHPRINCIPLE-signup", async (req, res) => {
       });
     }
 
-    res.json({ message: "Judge registered successfully" });
+    res.json({ message: "Principal registered successfully" });
   } catch (err) {
     console.error("Signup error:", err);
     res.status(500).json({ error: "Server error" });
